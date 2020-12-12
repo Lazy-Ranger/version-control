@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const { prompt } = require("./utils");
+const { prompt, closePrompt } = require("./utils");
 const file_system = require("./file_system");
 const { HISTORY_DIR, VERSION_FILE } = require("./config");
 
@@ -19,7 +19,29 @@ async function readFileHistory(fileLoc) {
 
   if (!fileMetadata) {
     console.log(`${filename} history not found`);
+    return;
   }
+
+  const fileVersions = fileMetadata.versions;
+
+  console.log("Choose file version : ");
+
+  fileVersions.forEach((version, index) => {
+    console.log(`version: ${index + 1} , date: ${version.date}`);
+  });
+
+  const vn = await prompt(": ");
+
+  const versionDetail = fileVersions.find((version) => version.name === +vn);
+
+  if (!versionDetail) {
+    console.log("Not a valid version number");
+    return;
+  }
+
+  const data = await file_system.readFile(versionDetail.file);
+
+  console.log(data);
 }
 
 async function writeFileHistory(fileLoc) {}
@@ -48,6 +70,8 @@ async function main() {
       await writeFileHistory(fileLoc);
       break;
   }
+
+  closePrompt();
 }
 
 main();

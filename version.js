@@ -14,7 +14,7 @@ async function initVersionControl() {
 
   if (!isDirExists) {
     await file_system.mkDir(HISTORY_DIR);
-    await file_system.writeFile(VERSION_FILE, "{}");
+    await file_system.writeFile(VERSION_FILE, JSON.stringify({}));
   }
 }
 

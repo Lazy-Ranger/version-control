@@ -2,13 +2,13 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 
+const file_system = require("./file_system");
+const { HISTORY_DIR, VERSION_FILE } = require("./config");
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-const HISTORY_DIR = path.join(__dirname, "history");
-const VERSION_FILE = path.join(HISTORY_DIR, "version.json");
 
 function prompt(message) {
   return new Promise((resolve) => {
@@ -23,7 +23,14 @@ function readFileHistory(fileLoc) {}
 
 function writeFileHistory(fileLoc) {}
 
-async function initVersionControl() {}
+async function initVersionControl() {
+  const isDirExists = await file_system.isDirExists(HISTORY_DIR);
+
+  if (!isDirExists) {
+    await file_system.mkDir(HISTORY_DIR);
+    await file_system.writeFile(VERSION_FILE, "{}");
+  }
+}
 
 async function main() {
   await initVersionControl();

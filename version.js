@@ -1,23 +1,9 @@
 const fs = require("fs");
 const path = require("path");
-const readline = require("readline");
 
+const { prompt } = require("./utils");
 const file_system = require("./file_system");
 const { HISTORY_DIR, VERSION_FILE } = require("./config");
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-function prompt(message) {
-  return new Promise((resolve) => {
-    rl.question(message, (ans) => {
-      rl.close();
-      resolve(ans);
-    });
-  });
-}
 
 function readFileHistory(fileLoc) {}
 

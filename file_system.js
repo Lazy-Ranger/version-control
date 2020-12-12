@@ -2,10 +2,11 @@ const fs = require("fs");
 
 function isDirExists(dir) {
   return new Promise((resolve) => {
-    fs.opendir(dir, (err) => {
+    fs.opendir(dir, (err, dh) => {
       if (err && err.code === "ENOENT") {
         resolve(false);
       } else {
+        dh.close();
         resolve(true);
       }
     });

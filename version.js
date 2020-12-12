@@ -5,9 +5,24 @@ const { prompt } = require("./utils");
 const file_system = require("./file_system");
 const { HISTORY_DIR, VERSION_FILE } = require("./config");
 
-function readFileHistory(fileLoc) {}
+async function readFileHistory(fileLoc) {
+  const VERSION_STORE = JSON.parse(await file_system.readFile(VERSION_FILE));
+  const filename = path.basename(fileLoc);
+  let fileMetadata;
 
-function writeFileHistory(fileLoc) {}
+  for (const key in VERSION_STORE) {
+    if (key === filename) {
+      fileMetadata = VERSION_STORE[key];
+      break;
+    }
+  }
+
+  if (!fileMetadata) {
+    console.log(`${filename} history not found`);
+  }
+}
+
+async function writeFileHistory(fileLoc) {}
 
 async function initVersionControl() {
   const isDirExists = await file_system.isDirExists(HISTORY_DIR);
@@ -22,15 +37,15 @@ async function main() {
   await initVersionControl();
 
   const fileLoc = await prompt("Enter file location : ");
-  const option = +(await prompt("1. Read history\n2. Write History\n"));
+  const option = await prompt("1. Read history\n2. Write History\n");
 
-  switch (option) {
+  switch (+option) {
     case 1:
-      readFileHistory(fileLoc);
+      await readFileHistory(fileLoc);
       break;
 
     case 2:
-      writeFileHistory(fileLoc);
+      await writeFileHistory(fileLoc);
       break;
   }
 }

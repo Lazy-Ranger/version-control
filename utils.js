@@ -5,10 +5,15 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+function closePrompt() {
+  if (rl) {
+    rl.close();
+  }
+}
+
 function prompt(message) {
   return new Promise((resolve) => {
     rl.question(message, (ans) => {
-      rl.close();
       resolve(ans);
     });
   });
@@ -16,4 +21,5 @@ function prompt(message) {
 
 module.exports = {
   prompt,
+  closePrompt,
 };

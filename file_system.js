@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { resolve } = require("path");
 
 function isDirExists(dir) {
   return new Promise((resolve) => {
@@ -45,10 +46,19 @@ function copyFile(src, target) {
   });
 }
 
+function watchFile(fileLoc, callbackFn) {
+  fs.watch(fileLoc, { interval: 1000 }, (evtName, fileName) => {
+    if (evtName === "change") {
+      callbackFn();
+    }
+  });
+}
+
 module.exports = {
   isDirExists,
   mkDir,
   writeFile,
   readFile,
   copyFile,
+  watchFile,
 };
